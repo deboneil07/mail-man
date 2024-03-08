@@ -30,22 +30,30 @@ class App:
         self.entry_gmail = ttk.Entry(self.frame1)
         self.entry_gmail.grid(row=1, column=1, sticky="ew", columnspan=2)
 
-        self.lbl_gmail = ttk.Label(self.frame1, text="Email Address", foreground="green", font=('Helvetica', 10))
+        self.lbl_gmail = ttk.Label(self.frame1, text="Email Address", font=('Helvetica', 10))
         self.lbl_gmail.grid(row=1, column=0)
+        self.entry_gmail.bind("<FocusIn>", self.lbl_gmail_active)
+        self.entry_gmail.bind("<FocusOut>", self.lbl_gmail_inactive)
 
         self.entry_password = ttk.Entry(self.frame1, show="*")
         self.entry_password.grid(row=2, column=1, sticky="ew", columnspan=2)
 
-        self.lbl_password = ttk.Label(self.frame1, text="App Password", foreground="green", font=('Helvetica', 10))
+        self.lbl_password = ttk.Label(self.frame1, text="App Password", font=('Helvetica', 10))
         self.lbl_password.grid( row=2, column=0)
+        self.entry_password.bind("<FocusIn>", self.lbl_password_active)
+        self.entry_password.bind("<FocusOut>", self.lbl_password_inactive)
 
-        
+    def lbl_gmail_active(self, event):
+        self.lbl_gmail.config(foreground="green")
 
+    def lbl_gmail_inactive(self, event):
+        self.lbl_gmail.config(foreground="black")
 
-        
+    def lbl_password_active(self, event):
+        self.lbl_password.config(foreground="green")
 
-
-
+    def lbl_password_inactive(self, event):
+        self.lbl_password.config(foreground="black")
 
 
 root = Tk()
