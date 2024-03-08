@@ -33,3 +33,4 @@ if __name__ == "__main__":
         
     except Exception as e:
         print("error sending mail", e)
+        print("try again!")
