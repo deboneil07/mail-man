@@ -1,44 +1,53 @@
-import tkinter as tk
+from tkinter import *
 from tkinter import ttk
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 
-# def send_mail(email, password, receiver):
-#     smtp_server = "smtp.gmail.com"
-#     smtp_port = 587
 
-#     server = smtplib.SMTP(host=smtp_server, port=smtp_port)
-#     server.starttls()
 
-#     server.login(email, password)
+login_header = ('Arial', 12, 'bold')
+class App:
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry("400x400")
+        self.root.title("Mailman")
+        self.login()
 
-#     message = MIMEMultipart()
-#     message["From"] = email
-#     message["To"] = receiver
-#     message["Subject"] = "Test Email for App"
-#     body = "Hi, this is a test email, thanks for reading. Have a great day."
-#     message.attach(MIMEText(body, 'plain'))
+    def login(self):
+        for i in self.root.winfo_children():
+            i.destroy()
+        self.frame1 = Frame(self.root, width=400, height=400)
+        for i in range(4):
+            self.frame1.rowconfigure(i, minsize=80, weight=1)
+        for i in range(3):
+            self.frame1.columnconfigure(i, minsize=100, weight=1)
+        self.frame1.pack()
+        self.lbl_intro_text = ttk.Label(self.frame1, text="Welcome to Mailman", font=("sans-serif", 14))
+        self.lbl_intro_text.grid(row=0, column=1)
 
-#     server.sendmail(email, receiver, message.as_string())
-#     server.quit()
-    
-# if __name__ == "__main__":
-#     email = os.getenv("MY_EMAIL")
-#     password = os.getenv("MY_PASS")
-#     receiver = "db1833@srmist.edu.in"
+        self.entry_gmail = ttk.Entry(self.frame1)
+        self.entry_gmail.grid(row=1, column=1, sticky="ew", columnspan=2)
 
-#     try:
-#         send_mail(email, password, receiver)
-#         print("sent successfully!")
+        self.lbl_gmail = ttk.Label(self.frame1, text="Email Address", foreground="green", font=('Helvetica', 10))
+        self.lbl_gmail.grid(row=1, column=0)
+
+        self.entry_password = ttk.Entry(self.frame1, show="*")
+        self.entry_password.grid(row=2, column=1, sticky="ew", columnspan=2)
+
+        self.lbl_password = ttk.Label(self.frame1, text="App Password", foreground="green", font=('Helvetica', 10))
+        self.lbl_password.grid( row=2, column=0)
+
         
-#     except Exception as e:
-#         print("error sending mail", e)
-#         print("try again!")
 
-window = tk.Tk()
-window.title("Mailman")
-window.minsize(400, 400)
 
-window.mainloop()
+        
+
+
+
+
+
+root = Tk()
+App(root)
+root.mainloop()
