@@ -60,6 +60,7 @@ class App:
                 print("auth pass")
                 self.main()
             else:
+                self.login()
                 raise ValueError("\nmissing or wrong credentials")
         except ValueError as e:
             print("auth failed", e)
@@ -69,7 +70,14 @@ class App:
         self.entry_password.delete("0", tk.END)
 
     def main(self):
-        print("Auth Complete, App starts here.")
+        for i in self.root.winfo_children():
+            i.destroy()
+        self.root.geometry("600x600")
+        self.frame2 = ttk.Frame(self.root, width=600, height=600)
+        for i in range(5):
+            self.frame2.rowconfigure(i, minsize=80, weight=1)
+        for i in range(3):
+            self.frame2.columnconfigure(i, minsize=100, weight=1)
 
 
     def help_link(self, event):
