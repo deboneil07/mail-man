@@ -1,5 +1,6 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
+import webbrowser
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -11,7 +12,7 @@ login_header = ('Arial', 12, 'bold')
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("400x400")
+        self.root.geometry("400x300")
         self.root.title("Mailman")
         self.login()
 
@@ -42,6 +43,15 @@ class App:
         self.lbl_password.grid( row=2, column=0)
         self.entry_password.bind("<FocusIn>", self.lbl_password_active)
         self.entry_password.bind("<FocusOut>", self.lbl_password_inactive)
+
+        self.lbl_help_link = ttk.Label(self.frame1, text="What is App Password?", foreground="blue", cursor="hand2")
+        self.lbl_help_link.bind("<Button-1>", self.help_link)
+
+        self.lbl_help_link.grid(row=3, column=1)
+
+    def help_link(self, event):
+        webbrowser.open("https://support.google.com/mail/answer/185833?hl=en#:~:text=Go%20to%20your%20Google%20Account,the%20page%2C%20select%20App%20passwords.", 0)
+
 
     def lbl_gmail_active(self, event):
         self.lbl_gmail.config(foreground="green")
