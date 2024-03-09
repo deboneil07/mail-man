@@ -12,7 +12,6 @@ class App:
         self.root = root
         self.root.geometry("400x400")
         self.root.title("Mailman")
-        
         self.login()
 
     def login(self):
@@ -47,15 +46,30 @@ class App:
         self.lbl_help_link.bind("<Button-1>", self.help_link)
         self.lbl_help_link.grid(row=3, column=1)   
 
-        self.btn_login = ttk.Button(self.frame1, text="Login")
+        self.btn_login = ttk.Button(self.frame1, text="Login", command=self.auth)
         self.btn_login.grid(row=4, column=1, sticky="ew")
 
         self.btn_reset = ttk.Button(self.frame1, text="Reset", command=self.reset)
         self.btn_reset.grid(row=4, column=2)
 
+    def auth(self):
+        try:
+            mail = self.entry_gmail.get()
+            password = self.entry_password.get()
+            if ((mail != "") and (password != "")):
+                print("auth pass")
+                self.main()
+            else:
+                raise ValueError("\nmissing or wrong credentials")
+        except ValueError as e:
+            print("auth failed", e)
+
     def reset(self):
         self.entry_gmail.delete("0", tk.END)
         self.entry_password.delete("0", tk.END)
+
+    def main(self):
+        print("Auth Complete, App starts here.")
 
 
     def help_link(self, event):
