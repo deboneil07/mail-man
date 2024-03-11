@@ -6,17 +6,18 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+from dotenv import load_dotenv, set_key
 
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("400x400")
         self.root.title("Mailman")
         self.login()
 
     def login(self):
         for i in self.root.winfo_children():
             i.destroy()
+        self.root.geometry("400x400")
         self.frame1 = Frame(self.root, width=400, height=400)
         for i in range(5):
             self.frame1.rowconfigure(i, minsize=80, weight=1)
@@ -52,11 +53,13 @@ class App:
         self.btn_reset = ttk.Button(self.frame1, text="Reset", command=self.reset)
         self.btn_reset.grid(row=4, column=2)
 
+        
+
     def auth(self):
         try:
             mail = self.entry_gmail.get()
             password = self.entry_password.get()
-            if ((mail == "") and (password == "")): ## remember to change this auth part
+            if ((mail != "") and (password != "")): ## remember to change this auth part
                 print("auth pass")
                 self.main()
             else:
@@ -70,8 +73,22 @@ class App:
         self.entry_password.delete("0", tk.END)
 
     def main(self):
+        load_dotenv()
+        user_gmail = self.entry_gmail.get()
+        user_password = self.entry_password.get()
+        print(user_gmail)
+        print(user_password)
+        
+        set_key(".env", 'MY_EMAIL', user_gmail)
+        set_key(".env", 'MY_PASSWORD', user_password)
+
+        load_dotenv()
+        print(os.getenv('MY_EMAIL'))
+        print(os.getenv('MY_PASSWORD'))
+
         for i in self.root.winfo_children():
             i.destroy()
+        
         self.root.geometry("600x600")
         self.frame2 = ttk.Frame(self.root, width=600, height=600)
         for i in range(5):
@@ -101,7 +118,25 @@ class App:
         self.entry_body = tk.Text(self.frame2, height=100, width=60, font=("Sans", 11))
         self.entry_body.grid(row=3, column=1, sticky="ew")
 
+        self.btn_back = ttk.Button(self.frame2, text="Back", command=self.login)
+        self.btn_back.grid(row=4, column=0)
 
+        self.btn_send = ttk.Button(self.frame2, text="Send", command=self.mail_send)
+        self.btn_send.grid(row=4, column=1, sticky="ew")
+        
+        self.btn_reset = ttk.Button(self.frame2, text="Reset", command=self.main_reset)
+        self.btn_reset.grid(row=4, column=2)
+
+
+    def mail_send(self):
+        load_dotenv()
+       
+
+
+    def main_reset(self):
+        self.entry_to.delete(0, tk.END)
+        self.entry_sub.delete(0, tk.END)
+        self.entry_body.delete("1.0", tk.END)
 
     def help_link(self, event):
         webbrowser.open("https://support.google.com/mail/answer/185833?hl=en#:~:text=Go%20to%20your%20Google%20Account,the%20page%2C%20select%20App%20passwords.", 0)
