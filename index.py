@@ -56,7 +56,7 @@ class App:
         try:
             mail = self.entry_gmail.get()
             password = self.entry_password.get()
-            if ((mail != "") and (password != "")):
+            if ((mail == "") and (password == "")): ## remember to change this auth part
                 print("auth pass")
                 self.main()
             else:
@@ -78,6 +78,29 @@ class App:
             self.frame2.rowconfigure(i, minsize=80, weight=1)
         for i in range(3):
             self.frame2.columnconfigure(i, minsize=100, weight=1)
+        self.frame2.pack()
+
+        self.lbl_head = ttk.Label(self.frame2, text="Compose Mail", font=("Arial", 20))
+        self.lbl_head.grid(row=0, column=1)
+
+        self.lbl_to = ttk.Label(self.frame2, text="To", font=("Arial", 14))
+        self.lbl_to.grid(row=1, column=0)
+
+        self.entry_to = ttk.Entry(self.frame2, width=60, font=("Helvetica", 12))
+        self.entry_to.grid(row=1, column=1, sticky="ew")
+
+        self.lbl_sub = ttk.Label(self.frame2, text="Subject",font=("Helvetica", 14))
+        self.lbl_sub.grid(row=2, column=0)
+
+        self.entry_sub = ttk.Entry(self.frame2, width=60, font=("Sans", 12))
+        self.entry_sub.grid(row=2, column=1, sticky=tk.EW)
+
+        self.lbl_body = ttk.Label(self.frame2, text="Body", font=("Sans", 14))
+        self.lbl_body.grid(row=3, column=0, sticky="n")
+
+        self.entry_body = tk.Text(self.frame2, height=100, width=60, font=("Sans", 11))
+        self.entry_body.grid(row=3, column=1, sticky="ew")
+
 
 
     def help_link(self, event):
