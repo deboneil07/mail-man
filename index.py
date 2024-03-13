@@ -59,7 +59,7 @@ class App:
         try:
             mail = self.entry_gmail.get()
             password = self.entry_password.get()
-            if ((mail != "") and (password != "")): ## remember to change this auth part
+            if ((mail != "") and (password != "")):
                 print("auth pass")
                 self.main()
             else:
@@ -73,18 +73,13 @@ class App:
         self.entry_password.delete("0", tk.END)
 
     def main(self):
-        load_dotenv()
         user_gmail = self.entry_gmail.get()
         user_password = self.entry_password.get()
-        print(user_gmail)
-        print(user_password)
         
         set_key(".env", 'MY_EMAIL', user_gmail)
         set_key(".env", 'MY_PASSWORD', user_password)
 
-        load_dotenv()
-        print(os.getenv('MY_EMAIL'))
-        print(os.getenv('MY_PASSWORD'))
+        load_dotenv(override=True) # allowing env to override the values
 
         for i in self.root.winfo_children():
             i.destroy()
@@ -121,16 +116,46 @@ class App:
         self.btn_back = ttk.Button(self.frame2, text="Back", command=self.login)
         self.btn_back.grid(row=4, column=0)
 
-        self.btn_send = ttk.Button(self.frame2, text="Send", command=self.mail_send)
+        self.btn_send = ttk.Button(self.frame2, text="Send", command=self.server_run)
         self.btn_send.grid(row=4, column=1, sticky="ew")
         
         self.btn_reset = ttk.Button(self.frame2, text="Reset", command=self.main_reset)
         self.btn_reset.grid(row=4, column=2)
 
+    def server_run(self):
+        self.mail_send(os.getenv('MY_EMAIL'), os.getenv('MY_PASSWORD'), self.entry_sub, self.entry_to, self.entry_body)
+        if (self.mail_send == True):
+            self.confirm()
+        else:
+            self.login()
 
-    def mail_send(self):
-        load_dotenv()
-       
+    def confirm(self):
+        None
+
+    def mail_send(self, my_gmail, my_password, subject, to, body):
+        try:
+            gmail_server = "smtp.gmail.com"
+            gmail_port = 587
+
+            mailing_server = smtplib.SMTP(gmail_server, gmail_port)
+            mailing_server.ehlo()
+            mailing_server.starttls()
+            mailing_server.login(user=my_gmail, password=my_password)
+
+            message = MIMEMultipart()
+            message['Subject'] = subject
+            message.attach(MIMEText(body))
+
+            mailing_server.sendmail(
+                from_addr=my_gmail,
+                to_addrs=to,
+                msg=message.as_string()
+            )
+
+            mailing_server.quit()
+            return True
+        except Exception as e:
+            return False
 
 
     def main_reset(self):
