@@ -11,8 +11,9 @@ from dotenv import load_dotenv, set_key
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title("Mailman")
-        self.login()
+        self.root.title("Mailman")  
+        self.error()
+        # self.login()
 
     def login(self):
         for i in self.root.winfo_children():
@@ -127,7 +128,31 @@ class App:
         if (self.mail_send == True):
             self.confirm()
         else:
-            self.login()
+            self.error()
+
+    def error(self):
+        for i in self.root.winfo_children():
+            i.destroy()
+        self.root.geometry("400x400")
+        self.frame_err = ttk.Frame(self.root, width=600, height=600)
+        self.frame_err.pack()
+        for i in range(4):
+            self.frame_err.rowconfigure(i, minsize=80, weight=1)
+        self.frame_err.columnconfigure(0, minsize=100, weight=1)
+
+        self.lbl_header = ttk.Label(self.frame_err, text=":\ ERROR 404 ;-;", font=("Helvetica", 28))
+        self.lbl_header.grid(row=1, column=0)
+
+        self.lbl_para = ttk.Label(self.frame_err ,font=("Sans", 12) ,text="\nThere was an issue with sending the mail. \n\nPlease check your credentials and try again.")
+        self.lbl_para.grid(row=2, column=0)
+
+        self.lbl_back = ttk.Label(self.frame_err, foreground="blue",text="go back to login page", cursor="hand2" ,font=("Sans", 12))
+        self.lbl_back.grid(row=4, column=0)
+        self.lbl_back.bind("<Button-1>", lambda event: self.login())
+
+        # self.root.after(1000, self.error)
+
+
 
     def confirm(self):
         None
@@ -180,6 +205,7 @@ class App:
         self.lbl_password.config(foreground="black")
 
 
-root = Tk()
-App(root)
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    App(root)
+    root.mainloop()
