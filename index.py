@@ -12,9 +12,9 @@ class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Mailman")  
-        self.confirm()
-        # self.error()
-        #self.login()
+        
+        
+        self.login()
 
     def login(self):
         for i in self.root.winfo_children():
@@ -62,7 +62,7 @@ class App:
             mail = self.entry_gmail.get()
             password = self.entry_password.get()
             if ((mail != "") and (password != "")):
-                print("auth pass")
+                
                 self.main()
             else:
                 self.login()
@@ -125,10 +125,17 @@ class App:
         self.btn_reset.grid(row=4, column=2)
 
     def server_run(self):
-        self.mail_send(os.getenv('MY_EMAIL'), os.getenv('MY_PASSWORD'), self.entry_sub, self.entry_to, self.entry_body)
-        if (self.mail_send == True):
+        success = self.mail_send(
+            os.getenv('MY_EMAIL'),
+            os.getenv('MY_PASSWORD'),
+            self.entry_sub.get(),
+            self.entry_to.get(),
+            self.entry_body
+        )
+        if success:
             self.confirm()
         else:
+            
             self.error()
 
     def error(self):
@@ -180,29 +187,24 @@ class App:
 
 
     def mail_send(self, my_gmail, my_password, subject, to, body):
-        try:
-            gmail_server = "smtp.gmail.com"
-            gmail_port = 587
-
-            mailing_server = smtplib.SMTP(gmail_server, gmail_port)
-            mailing_server.ehlo()
-            mailing_server.starttls()
-            mailing_server.login(user=my_gmail, password=my_password)
-
-            message = MIMEMultipart()
-            message['Subject'] = subject
-            message.attach(MIMEText(body))
-
-            mailing_server.sendmail(
-                from_addr=my_gmail,
-                to_addrs=to,
-                msg=message.as_string()
-            )
-
-            mailing_server.quit()
-            return True
-        except Exception:
-            return False
+        gmail_server = "smtp.gmail.com"
+        gmail_port = 587
+        mailing_server = smtplib.SMTP(gmail_server, gmail_port)
+        mailing_server.ehlo()
+        mailing_server.starttls()
+        mailing_server.login(user=my_gmail, password=my_password)
+        message = MIMEMultipart()
+        message['Subject'] = subject
+        message.attach(MIMEText(body.get("1.0", "end-1c"), 'plain'))
+        mailing_server.sendmail(
+            from_addr=my_gmail,
+            to_addrs=to,
+            msg=message.as_string()
+        )
+        mailing_server.quit()
+        return True
+    
+        
 
 
     def main_reset(self):
