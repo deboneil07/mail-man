@@ -12,8 +12,9 @@ class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Mailman")  
-        self.error()
-        # self.login()
+        self.confirm()
+        # self.error()
+        #self.login()
 
     def login(self):
         for i in self.root.winfo_children():
@@ -134,7 +135,7 @@ class App:
         for i in self.root.winfo_children():
             i.destroy()
         self.root.geometry("400x400")
-        self.frame_err = ttk.Frame(self.root, width=600, height=600)
+        self.frame_err = ttk.Frame(self.root, width=400, height=400)
         self.frame_err.pack()
         for i in range(4):
             self.frame_err.rowconfigure(i, minsize=80, weight=1)
@@ -155,7 +156,28 @@ class App:
 
 
     def confirm(self):
-        None
+        for i in self.root.winfo_children():
+            i.destroy()
+        self.root.geometry("400x400")
+        self.frame_con = ttk.Frame(self.root, height=600, width=600)
+        self.frame_con.pack()
+        for i in range(4):
+            self.frame_con.rowconfigure(i, minsize=80, weight=1)
+        self.frame_con.columnconfigure(0, minsize=100, weight=1)
+
+        self.lbl_header = ttk.Label(self.frame_con, text="Mail sent successfully!", font=("Helvetica", 28))
+        self.lbl_header.grid(row=1, column=0)
+
+        self.lbl_para = ttk.Label(self.frame_con ,font=("Sans", 12) ,text="\nYour mail has been sent successfully.\n ")
+        self.lbl_para.grid(row=2, column=0)
+
+        self.lbl_para2 = ttk.Label(self.frame_con, font=("Sans", 12), text="Thanks for using Mailman !")
+        self.lbl_para2.grid(row=3, column=0)
+
+        self.lbl_back = ttk.Label(self.frame_con, foreground="blue",text="go back to login page", cursor="hand2" ,font=("Sans", 12))
+        self.lbl_back.grid(row=4, column=0)
+        self.lbl_back.bind("<Button-1>", lambda event: self.login())
+
 
     def mail_send(self, my_gmail, my_password, subject, to, body):
         try:
@@ -179,7 +201,7 @@ class App:
 
             mailing_server.quit()
             return True
-        except Exception as e:
+        except Exception:
             return False
 
 
